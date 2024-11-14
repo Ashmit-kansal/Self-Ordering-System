@@ -22,7 +22,7 @@ const App = () => {
         <Route path="/" element={<Home cart={cart} setCart={setCart} appliedCoupon={appliedCoupon} setAppliedCoupon={setAppliedCoupon} />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/cart" element={<Cart cart={cart} setCart={setCart} onConfirmOrder={handleConfirmOrder} appliedCoupon={appliedCoupon} />} />
+        <Route path="/cart" element={<Cart cart={cart} setCart={setCart} onConfirmOrder={handleConfirmOrder} appliedCoupon={appliedCoupon} setAppliedCoupon={setAppliedCoupon} />} />
       </Routes>
     </Router>
   );

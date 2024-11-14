@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 Modal.setAppElement('#root');
 
@@ -35,16 +35,20 @@ const ReceiptModal = ({ isOpen, onRequestClose, orderDetails, discount }) => {
       const itemData = [
         item.productName,
         item.quantity,
-        `₹${item.price}`,
-        `₹${item.price * item.quantity}`,
+        `₹${item.price.toFixed(2)}`,
+        `₹${(item.price * item.quantity).toFixed(2)}`,
       ];
       tableRows.push(itemData);
     });
 
-    doc.autoTable(tableColumn, tableRows, { startY: 50 });
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 50,
+    });
 
     // Add discount and total
-    const finalY = doc.autoTable.previous.finalY + 10;
+    const finalY = doc.lastAutoTable.finalY + 10;
     doc.setFontSize(12);
     doc.text(`Discount: ₹${discount.toFixed(2)}`, 105, finalY, null, null, 'center');
     doc.text(`Total: ₹${calculateDiscountedTotal().toFixed(2)}`, 105, finalY + 10, null, null, 'center');
@@ -64,10 +68,10 @@ const ReceiptModal = ({ isOpen, onRequestClose, orderDetails, discount }) => {
       <div className="p-4">
         <h2 className="text-2xl font-bold mb-4">Receipt</h2>
         <div className="mb-4">
-          {orderDetails.map((item) => (
+          {Array.isArray(orderDetails) && orderDetails.map((item) => (
             <div key={item.productName} className="flex justify-between mb-2">
               <span>{item.productName} x {item.quantity}</span>
-              <span>₹{item.price * item.quantity}</span>
+              <span>₹{(item.price * item.quantity).toFixed(2)}</span>
             </div>
           ))}
         </div>

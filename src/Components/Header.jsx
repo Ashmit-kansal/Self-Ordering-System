@@ -28,6 +28,7 @@ const Header = () => {
           ☰
         </button>
       </div>
+      <div className='w-72 hidden custom-md:block'></div>
       <img
         src={logo}
         alt="Logo"
