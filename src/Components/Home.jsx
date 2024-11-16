@@ -7,7 +7,6 @@ import MenuItems from './MenuItems';
 const Home = ({ cart, setCart, appliedCoupon, setAppliedCoupon }) => {
   const [menuItems, setMenuItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-  const [showPaymentGateway, setShowPaymentGateway] = useState(false);
   const [category, setCategory] = useState('burger');
 
   useEffect(() => {
