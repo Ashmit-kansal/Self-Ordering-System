@@ -15,8 +15,8 @@ const Header = () => {
         <div className="flex flex-col items-start">
           <h1 className="text-3xl font-bold flex items-center">
             <span className="text-white">Flavor</span>
-            <span className="bg-gradient-to-r from-orange-400 to-orange-600 text-gray-800 px-2 ml-1 rounded">
-              Hub
+            <span className="bg-gradient-to-r from-bule-400 to-blue-600 text-gray-800 px-2 ml-1 rounded">
+              Haven
             </span>
           </h1>
           <p className="text-sm mt-1">From Street Eats to Global Treats</p>
