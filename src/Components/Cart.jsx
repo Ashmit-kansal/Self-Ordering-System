@@ -8,6 +8,7 @@ const Cart = ({ cart, setCart, appliedCoupon, setAppliedCoupon }) => {
   const [total, setTotal] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orderDetails, setOrderDetails] = useState([]);
+  const [gst, setGst] = useState(0);
 
   useEffect(() => {
     const newTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -20,6 +21,10 @@ const Cart = ({ cart, setCart, appliedCoupon, setAppliedCoupon }) => {
       newDiscount = newTotal * 0.2;
     }
     setDiscount(newDiscount);
+
+    const gstRate = 0.18;
+    const newGst = newTotal * gstRate;
+    setGst(newGst);
   }, [cart, appliedCoupon]);
 
   const handleQuantityChange = (item, delta) => {
@@ -58,7 +63,8 @@ const Cart = ({ cart, setCart, appliedCoupon, setAppliedCoupon }) => {
       })),
       discountPrice: discount,
       totalPrice: total,
-      paybillAmount: total - discount
+      paybillAmount: total - discount + gst,
+      gstAmount: gst,
     };
 
     console.log('Order Data:', JSON.stringify(orderData, null, 2));
@@ -71,16 +77,21 @@ const Cart = ({ cart, setCart, appliedCoupon, setAppliedCoupon }) => {
         },
         body: JSON.stringify(orderData),
       });
-      const data = await response.json();
-      console.log('Response data:', data);
-      if (data.success) {
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const responseData = await response.json();
+      console.log('Order response:', responseData);
+      if (responseData.success) {
         setOrderDetails(orderData.items);
         setIsModalOpen(true);
       } else {
         alert('Failed to place order. Please try again.');
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error creating order:', error);
       alert('Failed to place order. Please try again.');
     }
   };
@@ -125,8 +136,10 @@ const Cart = ({ cart, setCart, appliedCoupon, setAppliedCoupon }) => {
         )}
       </div>
       <div className="mt-4 p-4 bg-gray-100 rounded">
+        <p className="font-semibold">Total before GST: ₹{total.toFixed(2)}</p>
         <p className="font-semibold">Discount: ₹{discount.toFixed(2)}</p>
-        <p className="font-semibold">Total: ₹{(total - discount).toFixed(2)}</p>
+        <p className="font-semibold">GST: ₹{gst.toFixed(2)}</p>
+        <p className="font-semibold">Total: ₹{(total - discount + gst).toFixed(2)}</p>
       </div>
       <div className="flex justify-end mt-4 space-x-2">
         <input
